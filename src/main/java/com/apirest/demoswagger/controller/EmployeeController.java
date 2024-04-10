@@ -10,14 +10,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 import com.apirest.demoswagger.model.Employee;
+
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 public class EmployeeController {
 
+    //Acessar swagger: http://localhost:8080/swagger-ui/index.html
+
     List<Employee> employees = createList();
 
+
+    @Operation(summary = "Buscar todos empregados", method = "GET")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Upload de arquivo realizado com sucesso"),
+        @ApiResponse(responseCode = "422", description = "Dados de requisição inválida"),
+        @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
+        @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
+})
     @RequestMapping(value = "/employees", method = RequestMethod.GET, produces = "application/json")
     public List<Employee> firstPage() {
         return employees;
@@ -48,6 +62,13 @@ public class EmployeeController {
         return tempEmployees;
     }
 
+    @Operation(summary = "Realiza cadastro de empregado", method = "POST")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Upload de arquivo realizado com sucesso"),
+        @ApiResponse(responseCode = "422", description = "Dados de requisição inválida"),
+        @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
+        @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
+})
     @PostMapping
     public Employee create(@RequestBody Employee user) {
         employees.add(user);
@@ -55,8 +76,16 @@ public class EmployeeController {
         return user;
     }
 
+
+    @Operation(summary = "Deleta cadastro de empregado", method = "DELETE")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Upload de arquivo realizado com sucesso"),
+        @ApiResponse(responseCode = "422", description = "Dados de requisição inválida"),
+        @ApiResponse(responseCode = "400", description = "Parametros inválidos"),
+        @ApiResponse(responseCode = "500", description = "Erro ao realizar o upload de arquivo"),
+})
     @DeleteMapping(path = { "/{id}" })
-    public Employee delete(@PathVariable("id") int id) {
+    public Employee delete(@PathVariable("id") String id) {
         Employee deletedEmp = null;
         
         for (Employee emp : employees) {
